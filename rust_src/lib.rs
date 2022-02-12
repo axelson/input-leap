@@ -1,3 +1,4 @@
+//! Crate for the Input Leap's Rust core.
 #![deny(
     missing_copy_implementations,
     missing_debug_implementations,
