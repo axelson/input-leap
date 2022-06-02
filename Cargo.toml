@@ -2,16 +2,14 @@
 name = "input-leap"
 version = "2.4.0"
 edition = "2021"
-build = "build.rs"
 
 [lib]
 name = "inputleap"
 path = "rust_src/lib.rs"
-crate-type = ["cdylib"]
+crate-type = ["staticlib", "dylib"]
 
 [dependencies]
-libc = "0.2.117"
+libc = "0.2.125"
 
 [build-dependencies]
-cbindgen = "0.20.0"
 bindgen = "0.59.2"
