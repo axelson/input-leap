@@ -399,4 +399,12 @@ endif()
 
 enable_testing()
 
+cmake_policy (SET CMP0079 NEW)
+
+# Rust glue
+add_subdirectory(cmake/corrosion)
+corrosion_import_crate(
+    MANIFEST_PATH rust/Cargo.toml
+    LOCKED)
+
 add_subdirectory (src)
