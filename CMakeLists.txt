@@ -401,10 +401,20 @@ enable_testing()
 
 cmake_policy (SET CMP0079 NEW)
 
-# Rust glue
-add_subdirectory(cmake/corrosion)
-corrosion_import_crate(
-    MANIFEST_PATH rust/Cargo.toml
-    LOCKED)
+add_subdirectory (cmake/corrosion)
+
+find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
+if (CXXBRIDGE STREQUAL "CXXBRIDGE-NOTFOUND")
+    message("Could not find cxxbridge, trying to install with `cargo install cxxbridge-cmd'")
+    find_program(CARGO cargo PATHS "$ENV{HOME}/.cargo/bin/")
+    if (CARGO STREQUAL "CARGO-NOTFOUND")
+        message(FATAL_ERROR "Requires cargo available in path, install via rustup https://rustup.rs/")
+    endif()
+    execute_process(COMMAND ${CARGO} install cxxbridge-cmd)
+    find_program(CXXBRIDGE cxxbridge PATHS "$ENV{HOME}/.cargo/bin/")
+endif()
+
+corrosion_import_crate(MANIFEST_PATH rust_src/Cargo.toml)
+corrosion_add_cxxbridge(input_leap_rs_bridge CRATE input_leap_rs MANIFEST_PATH rust_src FILES lib.rs)
 
 add_subdirectory (src)
